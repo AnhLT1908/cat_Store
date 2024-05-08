@@ -10,7 +10,7 @@ const Header = () => {
           className="nav-content"
           style={{ backgroundColor: "gray" }}
         >
-          ha
+          HelloWorld
         </Col>
       </Row>
     </Container>
