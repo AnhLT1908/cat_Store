@@ -1,20 +1,26 @@
-import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Container, Nav, NavDropdown, NavLink, Navbar } from 'react-bootstrap'
 
-const Header = () => {
+function Header() {
   return (
-    <Container className="nav" fluid style={{ marginTop: "5px" }}>
-      <Row style={{ backgroundColor: "gray" }}>
-        <Col
-          md={12}
-          className="nav-content"
-          style={{ backgroundColor: "gray" }}
-        >
-          HelloWorld
-        </Col>
-      </Row>
-    </Container>
-  );
-};
+    <Navbar className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand href='#home'>Cat Store</Navbar.Brand>
+        {/*<Navbar.Toggle aria-controls="basic-navbar-nav" />*/}
+        <Navbar.Collapse id="cat-navbar-nav">
+          <Nav>
+            <NavLink href='#home'>Home</NavLink>
+            <NavLink href='#category'>Cat Breed</NavLink>
+            <NavDropdown title='Show More'>
+              <NavDropdown.Item href='#blog'>Blog</NavDropdown.Item>
+              <NavDropdown.Item href='#gallery'>Gallery</NavDropdown.Item>
+              <NavDropdown.Divider></NavDropdown.Divider>
+              <NavDropdown.Item href='#about'>About us</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  )
+}
 
-export default Header;
+export default Header
