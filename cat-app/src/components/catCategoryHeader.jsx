@@ -16,6 +16,13 @@ import {Link} from "react-router-dom";
 
 export default function CatCategoryHeader() {
   const [cateList, setCateList] = useState([]);
+  const [user, setUser] = useState('');
+
+
+   useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    setUser(JSON.parse(storedUser));
+   }, [])
 
   useEffect(() => {
     fetch("http://localhost:9999/information")
@@ -56,7 +63,11 @@ export default function CatCategoryHeader() {
             </Card>
           </Col>
         ))}
-        <Link to="/category">Show more</Link>
+        {user ? (
+          <Link to="/category">Show more</Link>
+        ) : (
+          <Link to="/unauthenticated">Show more</Link>
+        )}
       </Row>
     </Container>
   );

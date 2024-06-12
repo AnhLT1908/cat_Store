@@ -13,10 +13,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Sidebar from "./sidebar";
+import {useNavigate} from 'react-router-dom'
 
 function Header() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -32,6 +34,7 @@ function Header() {
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
+    navigate('/');
   };
 
   return (

@@ -8,6 +8,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Image,
   Row,
 } from "react-bootstrap";
@@ -102,6 +103,7 @@ const SignIn = () => {
                 Password:
               </FormLabel>
               <FormControl type="password" placeholder="Enter Password" onChange={(e) => {setPassword(e.target.value)}}/>
+              <FormText style={{color: 'red'}}>{errMessage}</FormText>
             </FormGroup>
             <FormGroup
               className="mb-3 d-flex justify-content-between"
