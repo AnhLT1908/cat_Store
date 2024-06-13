@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Col,
@@ -15,11 +15,50 @@ import {
 import { Link } from "react-router-dom";
 import signInImg from "../images/signin.jpg";
 import logo from "../images/logo.png";
-import apple from "../images/Apple_logo.png";
-import facebook from "../images/Facebook_icon.png";
-import google from "../images/google-icon.png";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [phone, setPhone] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [gender, setGender] = useState("male");
+
+  const navigate = useNavigate();
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+
+    fetch("http://localhost:9999/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        username: username,
+        email: email,
+        password: password,
+        phone: phone,
+        birthdate: birthdate,
+        gender: gender,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // Handle success, e.g., redirect to another page
+        navigate("/"); // Example redirect
+      })
+      .catch((err) => {
+        console.error(err);
+        // Handle error
+      });
+  };
+
   return (
     <Container fluid>
       <Row>
@@ -49,6 +88,7 @@ const SignUp = () => {
               padding: "20px",
               borderRadius: "10px",
             }}
+            onSubmit={handleSignup}
           >
             <Row>
               <Link to="/" className="d-flex justify-content-center">
@@ -59,68 +99,116 @@ const SignUp = () => {
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 First Name:
               </FormLabel>
-              <FormControl type="text" placeholder="Enter First Name" />
+              <FormControl
+                type="text"
+                placeholder="Enter First Name"
+                onChange={(e) => setFirstName(e.target.value)}
+              />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formLastName">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 Last Name:
               </FormLabel>
-              <FormControl type="text" placeholder="Enter Last Name" />
+              <FormControl
+                type="text"
+                placeholder="Enter Last Name"
+                onChange={(e) => setLastName(e.target.value)}
+              />
             </FormGroup>
-            <FormGroup className="mb-3" controlId="formLastName">
+            <FormGroup className="mb-3" controlId="formUsername">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
-                User Name:
+                Username:
               </FormLabel>
-              <FormControl type="text" placeholder="Enter User Name" />
+              <FormControl
+                type="text"
+                placeholder="Enter Username"
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </FormGroup>
-            <FormGroup className="mb-3" controlId="formLastName">
+            <FormGroup className="mb-3" controlId="formEmail">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 Email:
               </FormLabel>
-              <FormControl type="text" placeholder="Enter Email" />
+              <FormControl
+                type="email"
+                placeholder="Enter Email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </FormGroup>
-            <FormGroup className="mb-3" controlId="formLastName">
+            <FormGroup className="mb-3" controlId="formPassword">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 Password:
               </FormLabel>
-              <FormControl type="text" placeholder="Enter Password" />
+              <FormControl
+                type="password"
+                placeholder="Enter Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </FormGroup>
-            <FormGroup className="mb-3" controlId="formLastName">
+            <FormGroup className="mb-3" controlId="formPasswordConfirmation">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
-                Re-password:
+                Confirm Password:
               </FormLabel>
-              <FormControl type="text" placeholder="Enter Repassword" />
+              <FormControl
+                type="password"
+                placeholder="Confirm Password"
+                onChange={(e) => setPasswordConfirmation(e.target.value)}
+              />
             </FormGroup>
-            <FormGroup className="mb-3" controlId="formLastName">
+            <FormGroup className="mb-3" controlId="formPhone">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 Phone:
               </FormLabel>
-              <FormControl type="text" placeholder="Enter Phone" />
+              <FormControl
+                type="tel"
+                placeholder="Enter Phone"
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formBirthDate">
-              <Form.Label className="me-3" style={{ fontWeight: "bold" }}>
+              <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 Birth Date:
-              </Form.Label>
-              <Form.Control type="date" />
-            </FormGroup>
-            <FormGroup className="mb-3 d-flex align-content-center" controlId="formLastName">
-              <FormText className="mr-3" style={{ fontWeight: "bold", marginTop: '0px' }}>Gender:</FormText>
-              <FormCheck
-                className="mr-3"
-                type="radio"
-                label="Male"
-                name="gender"
+              </FormLabel>
+              <FormControl
+                type="date"
+                onChange={(e) => setBirthdate(e.target.value)}
               />
-              <FormCheck type="radio" label="Female" name="gender" />
+            </FormGroup>
+            <FormGroup className="mb-3" controlId="formGender">
+              <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
+                Gender:
+              </FormLabel>
+              <FormCheck
+                inline
+                label="Male"
+                type="radio"
+                name="gender"
+                value="male"
+                checked={gender === "male"}
+                onChange={() => setGender("male")}
+              />
+              <FormCheck
+                inline
+                label="Female"
+                type="radio"
+                name="gender"
+                value="female"
+                checked={gender === "female"}
+                onChange={() => setGender("female")}
+              />
             </FormGroup>
             <Row className="mt-3">
               <Col lg={12}>
-                <Button variant="success" style={{ width: "100%" }}>
+                <Button
+                  variant="success"
+                  type="submit"
+                  style={{ width: "100%" }}
+                >
                   Create a new account
                 </Button>
               </Col>
             </Row>
-          </Form>
+          </Form> 
         </Col>
       </Row>
     </Container>

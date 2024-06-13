@@ -13,12 +13,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Sidebar from "./sidebar";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+
+  console.log(user);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -34,7 +36,11 @@ function Header() {
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
-    navigate('/');
+    navigate("/");
+  };
+
+  const handleProfile = (username) => {
+    navigate(`/profile/${username}`);
   };
 
   return (
@@ -96,6 +102,9 @@ function Header() {
             </Form>
             {user ? (
               <NavDropdown title={user.username}>
+                <NavDropdown.Item onClick={() => handleProfile(user.username)}>
+                Profile
+                </NavDropdown.Item>
                 <NavDropdown.Item onClick={handleLogout}>
                   Logout
                 </NavDropdown.Item>

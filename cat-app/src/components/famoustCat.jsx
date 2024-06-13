@@ -26,9 +26,15 @@ function FamoustCat() {
   }, []);
 
   return (
-    <Container>
+    <Container className="mt-3">
+      <link
+        href="https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap"
+        rel="stylesheet"
+      />
       <Row>
-        <h1>Top famous cats:</h1>
+        <h1 style={{ fontFamily: "Just Another Hand, cursive", fontSize: '75px' }}>
+          Top famous cats:
+        </h1>
       </Row>
       <Row>
         {catImages.map((catImg) => (
@@ -46,9 +52,9 @@ function FamoustCat() {
         ))}
       </Row>
       <Row className="d-flex align-items-center justify-content-center">
-          <span className="line"></span>
-          <FontAwesomeIcon icon={faPaw} />
-          <span className="line"></span>
+        <span className="line"></span>
+        <FontAwesomeIcon icon={faPaw} />
+        <span className="line"></span>
       </Row>
     </Container>
   );

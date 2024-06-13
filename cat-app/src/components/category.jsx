@@ -17,7 +17,10 @@ import {
   Pagination,
   FormGroup,
   FormCheck,
+  Image,
 } from "react-bootstrap";
+
+import catImgConer from "../images/catCategory.png";
 
 const CatCategory = () => {
   const [catCard, setCatCard] = useState([]);
@@ -84,7 +87,9 @@ const CatCategory = () => {
   // Get filtered and sorted cards
   const getFilteredAndSortedCards = () => {
     let filteredCards =
-      catFilter === "All" ? catCardNotRandom : catCardNotRandom.filter((card) => card.breeds[0].name === catFilter);
+      catFilter === "All"
+        ? catCardNotRandom
+        : catCardNotRandom.filter((card) => card.breeds[0].name === catFilter);
 
     if (sortOrder === "Ascending") {
       filteredCards = filteredCards.sort((a, b) => a.height - b.height);
@@ -107,61 +112,98 @@ const CatCategory = () => {
 
   return (
     <Container fluid>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap"
+        rel="stylesheet"
+      />
       <Row>
         <Col>
-          <h1>Cat category</h1>
+          <h1
+            style={{
+              fontFamily: "Just Another Hand, cursive",
+              fontSize: "80px",
+            }}
+          >
+            Cat category
+          </h1>
         </Col>
       </Row>
       <Row>
-        <Col md={3} lg={2}>
+        <Col
+          md={3}
+          lg={2}
+          className="d-flex flex-column justify-content-between"
+        >
           {/* Filter Section */}
-          <h3>Sort by Category</h3>
-          <Form>
-            <div className="mb-3">
-              <FormCheck
-                type="radio"
-                label="All"
-                name="catFilter"
-                id="All"
-                checked={catFilter === "All"}
-                onChange={handleFilterChange}
-              />
-              {/* Dynamic Filter Radio Buttons */}
-              {[...new Set(catCardNotRandom.map((cat) => cat.breeds[0].name))].map((filterName, index) => (
+          <div>
+            <h3
+              style={{
+                fontFamily: "Just Another Hand, cursive",
+                fontSize: "50px",
+              }}
+            >
+              Sort by Category
+            </h3>
+            <Form>
+              <div className="mb-3">
                 <FormCheck
-                  key={index}
                   type="radio"
-                  label={filterName}
+                  label="All"
                   name="catFilter"
-                  id={filterName}
-                  checked={catFilter === filterName}
+                  id="All"
+                  checked={catFilter === "All"}
                   onChange={handleFilterChange}
                 />
-              ))}
-            </div>
-          </Form>
-          <h3>Sort by Price</h3>
-          <Form>
-            <div className="mb-3">
-              <FormCheck
-                type="radio"
-                label="Ascending"
-                name="sortOrder"
-                id="Ascending"
-                checked={sortOrder === "Ascending"}
-                onChange={() => handleSortChange("Ascending")}
-              />
-              <FormCheck
-                type="radio"
-                label="Descending"
-                name="sortOrder"
-                id="Descending"
-                checked={sortOrder === "Descending"}
-                onChange={() => handleSortChange("Descending")}
-              />
-            </div>
-          </Form>
+                {/* Dynamic Filter Radio Buttons */}
+                {[
+                  ...new Set(catCardNotRandom.map((cat) => cat.breeds[0].name)),
+                ].map((filterName, index) => (
+                  <FormCheck
+                    key={index}
+                    type="radio"
+                    label={filterName}
+                    name="catFilter"
+                    id={filterName}
+                    checked={catFilter === filterName}
+                    onChange={handleFilterChange}
+                  />
+                ))}
+              </div>
+            </Form>
+            <h3
+              style={{
+                fontFamily: "Just Another Hand, cursive",
+                fontSize: "50px",
+              }}
+            >
+              Sort by Price
+            </h3>
+            <Form>
+              <div className="mb-3">
+                <FormCheck
+                  type="radio"
+                  label="Ascending"
+                  name="sortOrder"
+                  id="Ascending"
+                  checked={sortOrder === "Ascending"}
+                  onChange={() => handleSortChange("Ascending")}
+                />
+                <FormCheck
+                  type="radio"
+                  label="Descending"
+                  name="sortOrder"
+                  id="Descending"
+                  checked={sortOrder === "Descending"}
+                  onChange={() => handleSortChange("Descending")}
+                />
+              </div>
+            </Form>
+          </div>
+          <div>
+            <Image src={catImgConer} style={{ width: "80%" }} />
+          </div>
         </Col>
+
         <Col md={9} lg={10}>
           <Row>
             {/* Render Cards */}
@@ -225,7 +267,7 @@ const CatCategory = () => {
           {/* Pagination */}
           <Row>
             <Col>
-              <Pagination>
+              <Pagination className="d-flex justify-content-center">
                 {pageNumbers.map((number) => (
                   <Pagination.Item
                     key={number}

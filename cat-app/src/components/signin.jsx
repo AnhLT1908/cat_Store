@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Col,
@@ -21,26 +21,32 @@ import google from "../images/google-icon.png";
 
 const SignIn = () => {
   const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [errMessage, setErrMessage] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
+    console.log(username, password);
 
-    fetch("https://dummyjson.com/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-        expiresInMins: 30,
-      }),
-    })
+    /**
+     * Thực ra nên dùng http://localhost:9999/users?username=${username}
+     * nếu có data thì mình so sánh với password, như thế mới gọi là "sai password"
+     * nếu không có data thì báo lại là email chưa được đăng kí
+     */
+    fetch(
+      `http://localhost:9999/users?username=${username}&password=${password}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        if (data && data.token) {
+        if (data) {
+          // delete token, chưa cần thiết phải sử dụng token, chỉ cần lưu username hoặc email vào localstorage thôi
           localStorage.setItem(
             "user",
             JSON.stringify({ username: username, token: data.token })
@@ -96,14 +102,26 @@ const SignIn = () => {
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 User Name:
               </FormLabel>
-              <FormControl type="text" placeholder="Enter User Name" onChange={(e) => {setUsername(e.target.value)}}/>
+              <FormControl
+                type="text"
+                placeholder="Enter User Name"
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+              />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formPassword">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 Password:
               </FormLabel>
-              <FormControl type="password" placeholder="Enter Password" onChange={(e) => {setPassword(e.target.value)}}/>
-              <FormText style={{color: 'red'}}>{errMessage}</FormText>
+              <FormControl
+                type="password"
+                placeholder="Enter Password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+              <FormText style={{ color: "red" }}>{errMessage}</FormText>
             </FormGroup>
             <FormGroup
               className="mb-3 d-flex justify-content-between"
