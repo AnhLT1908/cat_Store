@@ -9682,6 +9682,17 @@
       "phone": "0948705627",
       "birthdate": "2024-06-13",
       "gender": "female"
+    },
+    {
+      "id": "194f",
+      "firstName": "Nguyen",
+      "lastName": "Van B",
+      "username": "bnv",
+      "email": "anv@gmail.com",
+      "password": "123",
+      "phone": "0948705627",
+      "birthdate": "2024-06-18",
+      "gender": "male"
     }
   ]
 }

@@ -20,7 +20,7 @@ function Header() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  console.log(user);
+  console.log("User Header: ", user);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");

@@ -8,27 +8,82 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
-  FormText,
   Image,
   Row,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import signInImg from "../images/signin.jpg";
+import { Link, useParams } from "react-router-dom";
 import logo from "../images/logo.png";
-import { useNavigate, useParams } from "react-router-dom";
 
 const Profile = () => {
-  const [userinfo, setUserInfo] = useState([]);
+  const [userinfo, setUserInfo] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    phone: "",
+    birthDate: "",
+    gender: "",
+  });
   const { username } = useParams();
 
   useEffect(() => {
     fetch(`http://localhost:9999/users?username=${username}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
-        console.log("User info: ", data);
-        setUserInfo(data);
+        if (data.length > 0) {
+          const user = data[0];
+          console.log("User info: ", user);
+  
+          // Format the birthDate to yyyy-MM-dd
+          const formattedBirthDate = new Date(user.birthDate)
+            .toISOString()
+            .split("T")[0];
+  
+          setUserInfo({ ...user, birthDate: formattedBirthDate });
+        } else {
+          console.error("No user found");
+        }
+      })
+      .catch((error) => {
+        console.error("Fetch error: ", error);
       });
-  }, []);
+  }, [username]);
+  
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    fetch(`http://localhost:9999/users?username=${username}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName: userinfo.firstName,
+        lastName: userinfo.lastName,
+        username: userinfo.username,
+        email: userinfo.email,
+        phone: userinfo.phone,
+        birthDate: userinfo.birthDate,
+        gender: userinfo.gender,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((user) => {
+        console.log("Updated user: ", user);
+      })
+      .catch((error) => {
+        console.error("Update error: ", error);
+      });
+  };
+  
 
   return (
     <Container fluid>
@@ -46,6 +101,7 @@ const Profile = () => {
           className="d-flex flex-column align-items-center"
         >
           <Form
+            onSubmit={handleUpdate}
             style={{
               width: "50%",
               backgroundColor: "rgba(255, 255, 255, 0.7)",
@@ -63,56 +119,101 @@ const Profile = () => {
               <FormControl
                 type="text"
                 placeholder="Enter First Name"
-                value={userinfo[0].firstName}
+                value={userinfo.firstName}
+                onChange={(e) => {
+                  setUserInfo({ ...userinfo, firstName: e.target.value });
+                }}
               />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formLastName">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
-                Last Name:
+                Last Name
               </FormLabel>
-              <FormControl type="text" placeholder="Enter Last Name" value={userinfo[0].lastName}/>
+              <FormControl
+                type="text"
+                placeholder="Enter Last Name"
+                value={userinfo.lastName}
+                onChange={(e) => {
+                  setUserInfo({ ...userinfo, lastName: e.target.value });
+                }}
+              />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formUsername">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
-                Username:
+                Username
               </FormLabel>
-              <FormControl type="text" placeholder="Enter Username" value={userinfo[0].username}/>
+              <FormControl
+                type="text"
+                placeholder="Enter Username"
+                value={userinfo.username}
+                onChange={(e) => {
+                  setUserInfo({ ...userinfo, username: e.target.value });
+                }}
+              />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formEmail">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
-                Email:
+                Email
               </FormLabel>
-              <FormControl type="email" placeholder="Enter Email" value={userinfo[0].email}/>
+              <FormControl
+                type="email"
+                placeholder="Enter Email"
+                value={userinfo.email}
+                onChange={(e) => {
+                  setUserInfo({ ...userinfo, email: e.target.value });
+                }}
+              />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formPhone">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
-                Phone:
+                Phone
               </FormLabel>
-              <FormControl type="tel" placeholder="Enter Phone" value={userinfo[0].phone}/>
+              <FormControl
+                type="tel"
+                placeholder="Enter Phone"
+                value={userinfo.phone}
+                onChange={(e) => {
+                  setUserInfo({ ...userinfo, phone: e.target.value });
+                }}
+              />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formBirthDate">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
-                Birth Date:
+                Birth Date
               </FormLabel>
-              <FormControl type="date" />
+              <FormControl
+                type="date"
+                value={userinfo.birthDate}
+                onChange={(e) => {
+                  setUserInfo({ ...userinfo, birthDate: e.target.value });
+                }}
+              />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formGender">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
-                Gender:
+                Gender
               </FormLabel>
               <FormCheck
                 inline
                 label="Male"
                 type="radio"
                 name="gender"
-                value="male"
+                defaultValue="male"
+                checked={userinfo.gender === "male"}
+                onChange={(e) => {
+                  setUserInfo({ ...userinfo, gender: e.target.value });
+                }}
               />
               <FormCheck
                 inline
                 label="Female"
                 type="radio"
                 name="gender"
-                value="female"
+                defaultValue="female"
+                checked={userinfo.gender === "female"}
+                onChange={(e) => {
+                  setUserInfo({ ...userinfo, gender: e.target.value });
+                }}
               />
             </FormGroup>
             <Row className="mt-3">
@@ -122,7 +223,7 @@ const Profile = () => {
                   type="submit"
                   style={{ width: "100%" }}
                 >
-                  Create a new account
+                  Update Profile
                 </Button>
               </Col>
             </Row>
