@@ -43,7 +43,7 @@ const SignUp = () => {
         email: email,
         password: password,
         phone: phone,
-        birthdate: birthdate,
+        birthDate: birthdate,
         gender: gender,
       }),
     })

@@ -1,26 +1,17 @@
-import { useEffect, useState } from "react";
-import {
-  Container,
-  Nav,
-  NavDropdown,
-  Navbar,
-  Form,
-  FormControl,
-  Button,
-} from "react-bootstrap";
-import logo from "../images/logo.png";
+import React, { useState, useEffect, useContext } from "react";
+import { Container, Nav, NavDropdown, Navbar, Form, FormControl, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Sidebar from "./sidebar";
 import { useNavigate } from "react-router-dom";
+import logo from "../images/logo.png";
 
 function Header() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  console.log("User Header: ", user);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");

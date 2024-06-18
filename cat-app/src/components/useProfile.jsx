@@ -10,12 +10,19 @@ import {
   FormLabel,
   Image,
   Row,
+  Toast,
+  ToastContainer,
+  ProgressBar,
 } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
+import maleAvatar from "../images/maleAvatar.jpg";
+import femaleAvatar from "../images/femaleAvatar.jpg";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Profile = () => {
   const [userinfo, setUserInfo] = useState({
+    id: "",
     firstName: "",
     lastName: "",
     username: "",
@@ -24,6 +31,11 @@ const Profile = () => {
     birthDate: "",
     gender: "",
   });
+
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastVariant, setToastVariant] = useState("success");
+  const navigate = useNavigate();
   const { username } = useParams();
 
   useEffect(() => {
@@ -38,12 +50,20 @@ const Profile = () => {
         if (data.length > 0) {
           const user = data[0];
           console.log("User info: ", user);
-  
-          // Format the birthDate to yyyy-MM-dd
-          const formattedBirthDate = new Date(user.birthDate)
-            .toISOString()
-            .split("T")[0];
-  
+
+          // Check if birthDate is already in yyyy-MM-dd format
+          const birthDateRegex = /^\d{4}-\d{2}-\d{2}$/;
+          let formattedBirthDate;
+
+          if (birthDateRegex.test(user.birthDate)) {
+            formattedBirthDate = user.birthDate;
+          } else {
+            // Format the birthDate to yyyy-MM-dd
+            formattedBirthDate = new Date(user.birthDate)
+              .toISOString()
+              .split("T")[0];
+          }
+
           setUserInfo({ ...user, birthDate: formattedBirthDate });
         } else {
           console.error("No user found");
@@ -53,11 +73,10 @@ const Profile = () => {
         console.error("Fetch error: ", error);
       });
   }, [username]);
-  
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    fetch(`http://localhost:9999/users?username=${username}`, {
+    fetch(`http://localhost:9999/users/${userinfo.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -78,15 +97,25 @@ const Profile = () => {
       })
       .then((user) => {
         console.log("Updated user: ", user);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ username: userinfo.username })
+        );
+        navigate("/");
+        setToastVariant("success");
+        setToastMessage("Profile updated successfully!");
+        setShowToast(true);
       })
       .catch((error) => {
         console.error("Update error: ", error);
+        setToastVariant("danger");
+        setToastMessage("Profile update failed!");
+        setShowToast(true);
       });
   };
-  
 
   return (
-    <Container fluid>
+    <Container>
       <Row>
         <Col
           lg={12}
@@ -109,9 +138,25 @@ const Profile = () => {
               borderRadius: "10px",
             }}
           >
-            <Link to="/" className="d-flex justify-content-center">
-              <Image src={logo} style={{ width: "10%" }} />
-            </Link>
+            <Row className="d-flex justify-content-center">
+              <Link to="/" className="d-flex justify-content-center">
+                {userinfo.gender === "male" ? (
+                  <Image
+                    src={maleAvatar}
+                    alt="Male Avatar"
+                    roundedCircle
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                ) : (
+                  <Image
+                    src={femaleAvatar}
+                    alt="Female Avatar"
+                    roundedCircle
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                )}
+              </Link>
+            </Row>
             <FormGroup className="mb-3" controlId="formFirstName">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 First Name
@@ -193,12 +238,13 @@ const Profile = () => {
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
                 Gender
               </FormLabel>
+              <br />
               <FormCheck
                 inline
                 label="Male"
                 type="radio"
                 name="gender"
-                defaultValue="male"
+                value="male"
                 checked={userinfo.gender === "male"}
                 onChange={(e) => {
                   setUserInfo({ ...userinfo, gender: e.target.value });
@@ -209,7 +255,7 @@ const Profile = () => {
                 label="Female"
                 type="radio"
                 name="gender"
-                defaultValue="female"
+                value="female"
                 checked={userinfo.gender === "female"}
                 onChange={(e) => {
                   setUserInfo({ ...userinfo, gender: e.target.value });
@@ -230,6 +276,31 @@ const Profile = () => {
           </Form>
         </Col>
       </Row>
+      <ToastContainer
+        position="top-end"
+        className="p-3"
+        style={{ position: "fixed", top: 0, right: 0 }}
+      >
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          bg={toastVariant}
+          delay={3000}
+          autohide
+          className="d-flex flex-column align-items-center"
+        >
+          <Toast.Body style={{ color: "white", fontWeight: "bold" }}>
+            {toastMessage}
+          </Toast.Body>
+          <ProgressBar
+            animated
+            now={100}
+            className="w-100 mt-2"
+            variant={toastVariant === "success" ? "success" : "danger"}
+            style={{ height: "5px" }}
+          />
+        </Toast>
+      </ToastContainer>
     </Container>
   );
 };
