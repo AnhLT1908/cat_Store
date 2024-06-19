@@ -20,9 +20,13 @@ import { UserContext } from "./userContext";
 
 const ChangePass = () => {
   const [userpassword, setUserPassword] = useState({
+    id: "",
     password: "",
   });
 
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastVariant, setToastVariant] = useState("success");
@@ -32,21 +36,58 @@ const ChangePass = () => {
 
   useEffect(() => {
     fetch(`http://localhost:9999/users?username=${username}`)
-    .then((response) => {
+      .then((response) => {
         if (!response.ok) {
-            throw new Error (`HTTP error! Status: ${response.status}`)
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
-    })
-    .then((data) => {
+      })
+      .then((data) => {
         console.log("Password data:", data);
-        if(data.length > 0){
-            const user = data[0];
-            setUserPassword(user);
+        if (data.length > 0) {
+          const user = data[0];
+          setUserPassword(user);
         }
-    })
-    .catch((error) => console.error("Fetch error: ", error))
-  }, [])
+      })
+      .catch((error) => console.error("Fetch error: ", error));
+  }, []);
+
+  const handleChangePassword = (e) => {
+    e.preventDefault();
+
+    if (currentPassword !== userpassword.password) {
+      setToastVariant("danger");
+      setToastMessage("Current password is incorrect");
+      setShowToast(true);
+    } else if (confirmPassword !== newPassword) {
+      setToastVariant("danger");
+      setToastMessage("Confirm Password is incorrect");
+      setShowToast(true);
+    } else {
+      const updatedPassword = {...userpassword, password: newPassword}
+      console.log("New user password:", updatedPassword);
+
+      fetch(`http://localhost:9999/users/${userpassword.id}`, {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(updatedPassword),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((user) => {
+          setToastVariant("success");
+          setToastMessage("Password updated successfully!");
+          setShowToast(true);
+        })
+        .catch((error) => {
+          console.error("Update error:", error);
+        });
+    }
+  };
 
   return (
     <Container>
@@ -70,6 +111,7 @@ const ChangePass = () => {
               padding: "20px",
               borderRadius: "10px",
             }}
+            onSubmit={handleChangePassword}
           >
             <FormGroup className="mb-3" controlId="formCurrentPassword">
               <FormLabel className="me-3" style={{ fontWeight: "bold" }}>
@@ -78,6 +120,10 @@ const ChangePass = () => {
               <FormControl
                 type="password"
                 placeholder="Enter Current Password"
+                value={currentPassword}
+                onChange={(e) => {
+                  setCurrentPassword(e.target.value);
+                }}
               />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formNewPassword">
@@ -87,6 +133,10 @@ const ChangePass = () => {
               <FormControl
                 type="text"
                 placeholder="Enter New Password"
+                value={newPassword}
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                }}
               />
             </FormGroup>
             <FormGroup className="mb-3" controlId="formConfirmPassword">
@@ -96,6 +146,10 @@ const ChangePass = () => {
               <FormControl
                 type="text"
                 placeholder="Enter Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                }}
               />
             </FormGroup>
             <Row className="mt-3">
