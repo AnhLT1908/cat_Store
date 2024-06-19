@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Header from "./components/header";
 import Footer from "./components/footer";
-import Homepage from "./components/hompage";
+import Homepage from "./components/homepage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Gallery from "./components/gallery";
 import CatCategory from "./components/category";
@@ -16,11 +16,14 @@ import SignIn from "./components/signin";
 import SignUp from "./components/signup";
 import NotLogin from "./components/notLogin";
 import Profile from "./components/useProfile";
+import ChangePass from "./components/changePass";
+import { UserProvider } from "./components/userContext";
 
 const App = () => {
   const location = useLocation();
 
-  const isAuthPage = location.pathname === "/signin" || location.pathname === "/signup";
+  const isAuthPage =
+    location.pathname === "/signin" || location.pathname === "/signup";
 
   return (
     <>
@@ -32,6 +35,7 @@ const App = () => {
         <Route path="/category" element={<CatCategory />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/profile/:username" element={<Profile />} />
+        <Route path="/changeaccountpassword/:username" element={<ChangePass />} />
         <Route path="/unauthenticated" element={<NotLogin />} />
       </Routes>
       {!isAuthPage && <Footer />}
@@ -41,7 +45,9 @@ const App = () => {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <Router>
-    <App />
-  </Router>
+  <UserProvider>
+    <Router>
+      <App />
+    </Router>
+  </UserProvider>
 );

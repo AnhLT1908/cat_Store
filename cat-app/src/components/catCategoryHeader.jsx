@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 
 import {
   Card,
@@ -15,15 +15,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleRight, faArrowRightLong, faArrowRightToBracket, faClose, faPaw } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { UserContext } from "./userContext";
 
 export default function CatCategoryHeader() {
   const [cateList, setCateList] = useState([]);
-  const [user, setUser] = useState("");
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    setUser(JSON.parse(storedUser));
-  }, []);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     fetch("http://localhost:9999/information")

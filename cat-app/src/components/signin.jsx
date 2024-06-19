@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Button,
   Col,
@@ -18,42 +18,37 @@ import logo from "../images/logo.png";
 import apple from "../images/Apple_logo.png";
 import facebook from "../images/Facebook_icon.png";
 import google from "../images/google-icon.png";
+import { UserContext } from "./userContext";
 
 const SignIn = () => {
   const [username, setUsername] = useState("");
-  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [errMessage, setErrMessage] = useState("");
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(username, password);
 
-    /**
-     * Thực ra nên dùng http://localhost:9999/users?username=${username}
-     * nếu có data thì mình so sánh với password, như thế mới gọi là "sai password"
-     * nếu không có data thì báo lại là email chưa được đăng kí
-     */
-    fetch(
-      `http://localhost:9999/users?username=${username}&password=${password}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }
-    )
+    fetch(`http://localhost:9999/users?username=${username}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        if (data) {
-          // delete token, chưa cần thiết phải sử dụng token, chỉ cần lưu username hoặc email vào localstorage thôi
-          localStorage.setItem(
-            "user",
-            JSON.stringify({ username: username, token: data.token })
-          );
-          navigate("/");
+        if (data.length > 0) { // Ensure data is not empty
+          const user = data[0]; // Get the user from the data
+          if (user.password === password) { // Check if the password matches
+            localStorage.setItem("user", JSON.stringify(user));
+            setUser(user); // Update the user context
+            navigate("/");
+          } else {
+            setErrMessage("Invalid password. Please try again.");
+          }
         } else {
-          setErrMessage("Invalid email or password. Please try again.");
+          setErrMessage("Invalid username. Please try again.");
         }
       })
       .catch((err) => {
