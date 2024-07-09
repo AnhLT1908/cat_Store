@@ -15,25 +15,25 @@ function CarouselDisplay() {
   return (
     <Carousel activeIndex={index} onSelect={handleSelect}>
       <Carousel.Item>
-        <img className="img-fluid w-100" src={Cat1} alt="First slide" />
+        <img style={{width: '100%', height: '600px', objectFit: 'fill'}} className="img-fluid w-100" src={Cat1} alt="First slide" />
         <Carousel.Caption>
             <h3>Munchkin Cat</h3>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
-        <img className="img-fluid w-100" src={Cat2} alt="Second slide" />
+        <img style={{width: '100%', height: '600px', objectFit: 'fill'}} className="img-fluid w-100" src={Cat2} alt="Second slide" />
         <Carousel.Caption>
             <h3>Scottish Fold Cat</h3>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
-        <img className="d-block w-100" src={Cat3} alt="Third slide" />
+        <img style={{width: '100%', height: '600px', objectFit: 'fill'}} className="d-block w-100" src={Cat3} alt="Third slide" />
         <Carousel.Caption>
             <h3>Maine Coon Cat</h3>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
-        <img className="d-block w-100" src={Cat4} alt="Fourth slide" />
+        <img style={{width: '100%', height: '600px', objectFit: 'fill'}} className="d-block w-100" src={Cat4} alt="Fourth slide" />
         <Carousel.Caption>
             <h3>Persian Longhair Cat</h3>
         </Carousel.Caption>

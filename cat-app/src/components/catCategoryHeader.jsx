@@ -13,7 +13,13 @@ import {
   Button,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowCircleRight, faArrowRightLong, faArrowRightToBracket, faClose, faPaw } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowCircleRight,
+  faArrowRightLong,
+  faArrowRightToBracket,
+  faClose,
+  faPaw,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { UserContext } from "./userContext";
 
@@ -48,14 +54,7 @@ export default function CatCategoryHeader() {
           Best Seller:
         </h1>
       </Row>
-      <Row
-        xs={1}
-        sm={2}
-        md={3}
-        lg={3}
-        xl={3}
-        xxl={3}
-      >
+      <Row xs={1} sm={2} md={3} lg={3} xl={3} xxl={3}>
         {cateList.map((catCard) => (
           <Col key={catCard.id}>
             <Card>
@@ -71,18 +70,44 @@ export default function CatCategoryHeader() {
             </Card>
           </Col>
         ))}
-        </Row>
-        <Row>  
+      </Row>
+      <Row>
         {user ? (
           <Col>
-            <Link to="/category" style={{textDecoration: 'none'}}>
-            <button className="button-74 d-flex align-items-center" style={{ fontFamily: "Just Another Hand, cursive", fontSize: '30px', margin: '20px 0'}}>Show More<FontAwesomeIcon icon={faArrowRightLong} className="ml-2"/></button>
+            <Link to="/category" style={{ textDecoration: "none" }}>
+              <button
+                className="button-74 d-flex align-items-center"
+                style={{
+                  fontFamily: "Just Another Hand, cursive",
+                  fontSize: "30px",
+                  margin: "20px 0",
+                  borderRadius: "20px",
+                  backgroundColor: "#fbeee0",
+                  boxShadow: '#422800 4px 4px 0 0',
+                }}
+              >
+                Show More
+                <FontAwesomeIcon icon={faArrowRightLong} className="ml-2" />
+              </button>
             </Link>
           </Col>
         ) : (
           <Col>
-            <Link to="/unauthenticated" style={{textDecoration: 'none'}}>
-              <button className="button-74 d-flex align-items-center" style={{ fontFamily: "Just Another Hand, cursive", fontSize: '30px', margin: '20px 0'}}>Show More<FontAwesomeIcon icon={faArrowRightLong} className="ml-2"/></button>
+            <Link to="/unauthenticated" style={{ textDecoration: "none" }}>
+              <button
+                className="button-74 d-flex align-items-center"
+                style={{
+                  fontFamily: "Just Another Hand, cursive",
+                  fontSize: "30px",
+                  margin: "20px 0",
+                  borderRadius: "20px",
+                  backgroundColor: "#fbeee0",
+                  boxShadow: '#422800 4px 4px 0 0',
+                }}
+              >
+                Show More
+                <FontAwesomeIcon icon={faArrowRightLong} className="ml-2" />
+              </button>
             </Link>
           </Col>
         )}

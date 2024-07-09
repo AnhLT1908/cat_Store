@@ -18,7 +18,10 @@ import {
   FormGroup,
   FormCheck,
   Image,
+  FormControl,
 } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faBars } from "@fortawesome/free-solid-svg-icons";
 
 import catImgConer from "../images/catCategory.png";
 
@@ -31,7 +34,6 @@ const CatCategory = () => {
   const [sortOrder, setSortOrder] = useState(null);
   const cardsPerPage = 6;
 
-  // Fetch data and shuffle it on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,7 +48,6 @@ const CatCategory = () => {
     fetchData();
   }, []);
 
-  // Shuffles the array
   const shuffleArray = (array) => {
     let currentIndex = array.length,
       randomIndex;
@@ -61,7 +62,6 @@ const CatCategory = () => {
     return array;
   };
 
-  // Handles page change
   const handlePageChange = (number) => {
     setTransitioning(true);
     setTimeout(() => {
@@ -70,21 +70,18 @@ const CatCategory = () => {
     }, 500);
   };
 
-  // Handles filter change
   const handleFilterChange = (e) => {
     const filter = e.target.id;
     setCatFilter(filter);
-    setSortOrder(null); // Reset sort order when changing filter
-    setCurrentPage(1); // Reset to the first page when filter changes
+    setSortOrder(null);
+    setCurrentPage(1);
   };
 
-  // Handles sorting by price
   const handleSortChange = (order) => {
     setSortOrder(order);
-    setCurrentPage(1); // Reset to the first page when sort order changes
+    setCurrentPage(1);
   };
 
-  // Get filtered and sorted cards
   const getFilteredAndSortedCards = () => {
     let filteredCards =
       catFilter === "All"
@@ -100,7 +97,6 @@ const CatCategory = () => {
     return filteredCards;
   };
 
-  // Pagination logic
   const filteredCards = getFilteredAndSortedCards();
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
@@ -116,8 +112,8 @@ const CatCategory = () => {
         href="https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap"
         rel="stylesheet"
       />
-      <Row>
-        <Col>
+      <Row className="d-flex align-items-center">
+        <Col md={2}>
           <h1
             style={{
               fontFamily: "Just Another Hand, cursive",
@@ -126,6 +122,23 @@ const CatCategory = () => {
           >
             Cat category
           </h1>
+        </Col>
+        <Col md={10} className="d-flex justify-content-center">
+          <Form>
+            <FormGroup className="d-flex">
+              <FormControl
+                type="search"
+                placeholder="Input category of cat to search ..."
+                className="inputSearch mr-3"
+                style={{ width: "500px" }}
+              />
+
+              <Button variant="outline-success">
+                <FontAwesomeIcon icon={faSearch} className="mr-2" />
+                Search
+              </Button>
+            </FormGroup>
+          </Form>
         </Col>
       </Row>
       <Row>

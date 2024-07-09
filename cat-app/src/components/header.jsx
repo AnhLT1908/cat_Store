@@ -18,14 +18,14 @@ import { UserContext } from "./userContext";
 import logo from "../images/logo.png";
 
 function Header() {
-  const [showSidebar, setShowSidebar] = useState(false);
+  // const [showSidebar, setShowSidebar] = useState(false);
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   console.log("User", user);
 
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
-  };
+  // const toggleSidebar = () => {
+  //   setShowSidebar(!showSidebar);
+  // };
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -49,20 +49,9 @@ function Header() {
 
   return (
     <>
-      <Navbar expand="lg" className="bg-body-tertiary">
+      <Navbar expand="lg" className="bg-body-tertiary" style={{backgroundColor: '#fbeee0'}}>
         <Container fluid>
           <Row className="d-flex align-items-center" style={{ width: "100%" }}>
-            <Col lg={1}>
-              <Row className="d-flex justify-content-center">
-                <Button
-                  variant="outline-success"
-                  onClick={toggleSidebar}
-                  className="me-2"
-                >
-                  <FontAwesomeIcon icon={faBars} />
-                </Button>
-              </Row>
-            </Col>
             <Col lg={1}>
               <Row className="d-flex justify-content-center">
                 <Navbar.Brand as={Link} to="/">
@@ -75,7 +64,7 @@ function Header() {
                 <Navbar.Toggle aria-controls="cat-navbar-nav" />
               </Row>
             </Col>
-            <Col lg={10}>
+            <Col lg={11}>
               <Navbar.Collapse id="cat-navbar-nav">
                 <Row
                   className="d-flex align-items-center"
@@ -85,7 +74,7 @@ function Header() {
                     <Nav.Link
                       className="me-auto d-flex"
                       navbarScroll
-                      style={{ fontWeight: "bold" }}
+                      style={{ fontWeight: "bold", textDecoration: 'none' }}
                     >
                       <Nav.Link as={Link} to="/">
                         Home
@@ -114,33 +103,6 @@ function Header() {
                     </Nav.Link>
                   </Col>
                   <Col lg={7}>
-                    {user ? (
-                      <Form className="d-flex searchForm">
-                        <Row style={{ width: "100%" }}>
-                          <Col lg={10}>
-                            <FormControl
-                              type="search"
-                              placeholder="Search"
-                              className="me-2 inputSearch"
-                            />
-                          </Col>
-                          <Col lg={2}>
-                            <Button
-                              variant="outline-success"
-                              style={{ width: "100%" }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faSearch}
-                                className="mr-2"
-                              />
-                              Search
-                            </Button>
-                          </Col>
-                        </Row>
-                      </Form>
-                    ) : (
-                      <div></div>
-                    )}
                   </Col>
                   <Col lg={2} className="d-flex justify-content-end">
                     {user ? (
@@ -183,7 +145,7 @@ function Header() {
           </Row>
         </Container>
       </Navbar>
-      <Sidebar show={showSidebar} onHide={toggleSidebar} />
+      {/* <Sidebar show={showSidebar} onHide={toggleSidebar} /> */}
     </>
   );
 }

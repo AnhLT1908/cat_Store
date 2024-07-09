@@ -32,7 +32,9 @@ function FamoustCat() {
         rel="stylesheet"
       />
       <Row>
-        <h1 style={{ fontFamily: "Just Another Hand, cursive", fontSize: '75px' }}>
+        <h1
+          style={{ fontFamily: "Just Another Hand, cursive", fontSize: "75px" }}
+        >
           Top famous cats:
         </h1>
       </Row>
@@ -46,15 +48,20 @@ function FamoustCat() {
             key={catImg.id}
             className="d-flex flex-column align-items-center mb-4"
           >
-            <Image src={catImg.url} roundedCircle className="m-1" />
+            <Image
+              src={catImg.url}
+              roundedCircle
+              className="m-1"
+              style={{ width: "200px", height: "200px", objectFit: "fill" }}
+            />
             <h3 style={{ textAlign: "center" }}>{catImg.breeds[0].name}</h3>
           </Col>
         ))}
       </Row>
       <Row className="d-flex align-items-center justify-content-center">
-        <span className="line"></span>
+        <span className="line" style={{borderBottom: '3px solid black', width: '200px', margin: '50px 10px'}}></span>
         <FontAwesomeIcon icon={faPaw} />
-        <span className="line"></span>
+        <span className="line" style={{borderBottom: '3px solid black', width: '200px', margin: '50px 10px'}}></span>
       </Row>
     </Container>
   );
